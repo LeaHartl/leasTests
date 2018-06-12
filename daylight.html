@@ -1,0 +1,499 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>TempAnnualTimeSeries</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+        <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script type="text/javascript"></script>
+  </head>
+
+
+   <body>
+
+  <select id="chartType">
+    <option value="0">-select station-</option>
+    <option value="1">Anchorage</option>
+    <option value="2">Bethel</option>
+    <option value="3">Bettles</option>
+    <option value="4">Cold Bay</option>
+    <option value="5">Delta Junction</option>
+    <option value="6">Fairbanks</option>
+    <option value="7">Gulkana</option>
+    <option value="8">Homer</option>
+    <option value="9">Juneau</option>
+    <option value="10">Ketchikan</option>
+    <option value="11">King Salmon</option>
+    <option value="12">Kodiak</option>
+    <option value="13">Kotzebue</option>
+    <option value="14">McGrath</option>
+    <option value="15">Nome</option>
+    <option value="16">St. Paul Island</option>
+    <option value="17">Talkeetna</option>
+    <option value="18">Utqiaġvik</option>
+    <option value="19">Yakutat</option>
+  </select>
+
+      <div id = "container" style = "width: 900px; height: 600px; margin: 0 auto"></div>
+      <script language = "JavaScript">
+// HIER WEITER http://jsfiddle.net/jlbriggs/cb3csxh7/
+$(document).ready(function(){
+  $('#container').highcharts({
+
+    chart: {
+    renderTo: 'container',
+    type: 'line',
+    zoomType: 'x'},
+    title: {
+      text: ''
+    },
+    subtitle:{
+    text: '',
+          style: {
+            fontSize: '14px'}
+    },
+    
+    xAxis:{
+      type: 'datetime',
+      dateTimeLabelFormats: { // don't display the dummy year
+            month: '%e. %b',
+            year: '%b'
+        }
+        // ,
+    //   labels: {
+    //     style: {
+    //       color: '#000000',
+    //       fontSize: '14px'
+    //   }
+    // }
+    },
+
+
+    yAxis:[{
+      type: 'datetime',
+      dateTimeLabelFormats : {
+        day: '%H:%M'
+      },
+      title: {
+                text: 'AK standard time (hh:mm)'
+            },
+            // labels: {
+            //     formatter: function () {
+            //         var time = this.value;
+            //         var hours1=parseInt(time/3600000);
+            //         var mins1=parseInt((parseInt(time%3600000))/60000);
+            //         return hours1 + ':' + mins1;
+            //     }},
+      // title:{
+      //         text: 'time (AKST)',
+      //               style: {
+      //                 fontSize: '14px'
+      //              },
+      //       },
+            // labels: {
+            //   style: {
+            //           color: '#000000'
+            //         }
+            // }
+    }],
+    credits: {enabled: false},
+
+    tooltip:{
+      shared: true,
+      crosshairs: true,
+      
+      formatter: function() {
+                    return 'date: ' + Highcharts.dateFormat('%m-%d', this.x) + 
+                    '<br/> sunrise: '+ Highcharts.dateFormat('%H:%M', this.points[0].point.low) +', sunset: '+ Highcharts.dateFormat('%H:%M', this.points[0].point.high) +
+                    '<br/> civil rise: '+ Highcharts.dateFormat('%H:%M', this.points[1].point.low) +', civil set: '+ Highcharts.dateFormat('%H:%M', this.points[2].point.high) + 
+                    '<br/> nautical rise: '+ Highcharts.dateFormat('%H:%M', this.points[3].point.low) +', nautical set: '+ Highcharts.dateFormat('%H:%M', this.points[4].point.high) +
+                    '<br/> astro rise: '+ Highcharts.dateFormat('%H:%M', this.points[5].point.low) +', astro set: '+ Highcharts.dateFormat('%H:%M', this.points[6].point.high);
+                },
+      xDateFormat: '%m-%d',
+    },
+
+    series:[{
+          type: 'arearange',
+          name: 'Day',
+          data: {{AnchorageDay}},
+          color: Highcharts.getOptions().colors[6],
+          },
+          {
+          type: 'arearange',
+          name: 'Civil twilight AM',
+          data: {{AnchorageCivil_twilight_AM}},
+          color: Highcharts.getOptions().colors[0],
+          },
+          {
+          type: 'arearange',
+          name: 'Civil twilight PM',
+          data: {{AnchorageCivil_twilight_PM}},
+          color: Highcharts.getOptions().colors[0],
+          },
+          {
+          type: 'arearange',
+          name: 'Nautical twilight AM',
+          data: {{AnchorageNautical_twilight_AM}},
+          color: Highcharts.getOptions().colors[1],
+          },
+          {
+          type: 'arearange',
+          name: 'Nautical twilight PM',
+          data: {{AnchorageNautical_twilight_PM}},
+          color: Highcharts.getOptions().colors[1],
+          },
+          {
+          type: 'arearange',
+          name: 'Astronomical AM',
+          data: {{AnchorageAstro_twilight_AM}},
+          color: Highcharts.getOptions().colors[3],
+          },
+          {
+          type: 'arearange',
+          name: 'Astronomical PM',
+          data: {{AnchorageAstro_twilight_PM}},
+          color: Highcharts.getOptions().colors[3],
+          },
+             {
+          type: 'arearange',
+          name: 'Night AM',
+          data: {{AnchorageNight_AM}},
+          color: Highcharts.getOptions().colors[8],
+          },
+             {
+          type: 'arearange',
+          name: 'Night PM',
+          data: {{AnchorageNight_PM}},
+          color: Highcharts.getOptions().colors[8],
+          }
+          // ,
+          // {
+          // name: 'sunset',
+          // data: [{{Anchoragesunset}}],
+          // lineWidth: 2,
+          // color: Highcharts.getOptions().colors[1],
+          // showInLegend: true,
+          // marker: {
+          // enabled: false
+          //   }
+          // }
+          ]
+
+    });
+
+    });
+  
+  $('#chartType').change(function(){
+    var selVal = $("#chartType").val();
+
+    if(selVal == '0' || selVal == '1') {
+        Highcharts.charts[0].series[0].update({ data: {{AnchorageDay}} });
+        Highcharts.charts[0].series[1].update({ data: {{AnchorageCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{AnchorageCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{AnchorageNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{AnchorageNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{AnchorageAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{AnchorageAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{AnchorageNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{AnchorageNight_PM}} });
+        Highcharts.charts[0].redraw()}
+   else if (selVal == '2'){
+        Highcharts.charts[0].series[0].update({ data:  {{BethelDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{BethelCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data:  {{BethelCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{BethelNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{BethelNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{BethelAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{BethelAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{BethelNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{BethelNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '3'){
+        Highcharts.charts[0].series[0].update({ data:  {{BettlesDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{BettlesCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data:  {{BettlesCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{BettlesNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{BettlesNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{BettlesAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{BettlesAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{BettlesNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{BettlesNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '4'){
+        Highcharts.charts[0].series[0].update({ data:  {{ColdBayDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{ColdBayCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data:  {{ColdBayCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{ColdBayNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{ColdBayNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{ColdBayAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{ColdBayAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{ColdBayNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{ColdBayNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '5'){
+        Highcharts.charts[0].series[0].update({ data:  {{DeltaJunctionDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{DeltaJunctionCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data:  {{DeltaJunctionCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{DeltaJunctionNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{DeltaJunctionNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{DeltaJunctionAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{DeltaJunctionAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{DeltaJunctionNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{DeltaJunctionNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '6'){
+        Highcharts.charts[0].series[0].update({ data:  {{FairbanksDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{FairbanksCivil_twilight_AM}} });
+        Highcharts.charts[0].series[1].update({ data: {{FairbanksCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{FairbanksCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{FairbanksNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{FairbanksNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{FairbanksAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{FairbanksAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{FairbanksNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{FairbanksNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '7'){
+        Highcharts.charts[0].series[0].update({ data:  {{GulkanaDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{GulkanaCivil_twilight_AM}} });
+        Highcharts.charts[0].series[1].update({ data: {{GulkanaCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{GulkanaCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{GulkanaNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{GulkanaNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{GulkanaAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{GulkanaAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{GulkanaNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{GulkanaNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '8'){
+        Highcharts.charts[0].series[0].update({ data:  {{HomerDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{HomerCivil_twilight_AM}} });
+        Highcharts.charts[0].series[1].update({ data: {{HomerCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{HomerCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{HomerNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{HomerNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{HomerAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{HomerAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{HomerNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{HomerNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '9'){
+        Highcharts.charts[0].series[0].update({ data:  {{JuneauDay}}});
+        Highcharts.charts[0].series[1].update({ data:  {{JuneauCivil_twilight_AM}}});
+        Highcharts.charts[0].series[1].update({ data: {{JuneauCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{JuneauCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{JuneauNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{JuneauNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{JuneauAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{JuneauAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{JuneauNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{JuneauNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '10'){
+        Highcharts.charts[0].series[0].update({ data:  {{KetchikanDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{KetchikanCivil_twilight_AM}} });
+        Highcharts.charts[0].series[1].update({ data: {{KetchikanCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{KetchikanCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{KetchikanNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{KetchikanNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{KetchikanAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{KetchikanAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{KetchikanNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{KetchikanNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '11'){
+        Highcharts.charts[0].series[0].update({ data:  {{KingSalmonDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{KingSalmonCivil_twilight_AM}} });
+        Highcharts.charts[0].series[1].update({ data: {{KingSalmonCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{KingSalmonCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{KingSalmonNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{KingSalmonNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{KingSalmonAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{KingSalmonAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{KingSalmonNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{KingSalmonNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '12'){
+        Highcharts.charts[0].series[0].update({ data:  {{KodiakDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{KodiakCivil_twilight_AM}} });
+        Highcharts.charts[0].series[1].update({ data: {{KodiakCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{KodiakCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{KodiakNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{KodiakNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{KodiakAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{KodiakAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{KodiakNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{KodiakNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '13'){
+        Highcharts.charts[0].series[0].update({ data:  {{KotzebueDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{KotzebueCivil_twilight_AM}} });
+        Highcharts.charts[0].series[1].update({ data: {{KotzebueCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{KotzebueCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{KotzebueNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{KotzebueNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{KotzebueAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{KotzebueAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{KotzebueNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{KotzebueNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '14'){
+        Highcharts.charts[0].series[0].update({ data:  {{McGrathDay}}});
+        Highcharts.charts[0].series[1].update({ data:  {{McGrathCivil_twilight_AM}}});
+        Highcharts.charts[0].series[1].update({ data: {{McGrathCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{McGrathCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{McGrathNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{McGrathNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{McGrathAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{McGrathAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{McGrathNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{McGrathNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '15'){
+        Highcharts.charts[0].series[0].update({ data:  {{NomeDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{NomeCivil_twilight_AM}} });
+        Highcharts.charts[0].series[1].update({ data: {{NomeCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{NomeCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{NomeNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{NomeNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{NomeAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{NomeAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{NomeNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{NomeNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '16'){
+        Highcharts.charts[0].series[0].update({ data:  {{StPaulIslandDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{StPaulIslandCivil_twilight_AM}} });
+        Highcharts.charts[0].series[1].update({ data: {{StPaulIslandCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{StPaulIslandCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{StPaulIslandNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{StPaulIslandNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{StPaulIslandAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{StPaulIslandAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{StPaulIslandNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{StPaulIslandNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '17'){
+        Highcharts.charts[0].series[0].update({ data:  {{TalkeetnaDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{TalkeetnaCivil_twilight_AM}}});
+        Highcharts.charts[0].series[1].update({ data: {{TalkeetnaCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{TalkeetnaCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{TalkeetnaNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{TalkeetnaNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{TalkeetnaAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{TalkeetnaAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{TalkeetnaNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{TalkeetnaNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '18'){
+        Highcharts.charts[0].series[0].update({ data:  {{UtqiaġvikDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{UtqiaġvikCivil_twilight_AM}} });
+        Highcharts.charts[0].series[1].update({ data: {{UtqiaġvikCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{UtqiaġvikCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{UtqiaġvikNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{UtqiaġvikNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{UtqiaġvikAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{UtqiaġvikAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{UtqiaġvikNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{UtqiaġvikNight_PM}} });
+        Highcharts.charts[0].redraw()}
+    else if (selVal == '19'){
+        Highcharts.charts[0].series[0].update({ data:  {{YakutatDay}} });
+        Highcharts.charts[0].series[1].update({ data:  {{YakutatCivil_twilight_AM}} });
+        Highcharts.charts[0].series[1].update({ data: {{YakutatCivil_twilight_AM}} });
+        Highcharts.charts[0].series[2].update({ data: {{YakutatCivil_twilight_PM}} });
+        Highcharts.charts[0].series[3].update({ data: {{YakutatNautical_twilight_AM}} });
+        Highcharts.charts[0].series[4].update({ data: {{YakutatNautical_twilight_PM}} });
+        Highcharts.charts[0].series[5].update({ data: {{YakutatAstro_twilight_AM}} });
+        Highcharts.charts[0].series[6].update({ data: {{YakutatAstro_twilight_PM}} });
+        Highcharts.charts[0].series[7].update({ data: {{YakutatNight_AM}} });
+        Highcharts.charts[0].series[8].update({ data: {{YakutatNight_PM}} });
+        Highcharts.charts[0].redraw()}        
+   Highcharts.charts[0].redraw();
+
+
+})
+;
+
+// **** 
+// *****
+  //     $(function () {
+  //       $('#container').highcharts({
+  //       chart: {
+  //          zoomType: 'x'
+  //       },
+  //       title: {
+  //               text: 'Mean annual air temperature'
+  //       },
+  //       subtitle:{
+  //         text: '{{ key }}',
+  //               style: {
+  //                 fontSize: '14px'
+  //               }
+  //       },
+  //       xAxis:{
+  //         categories:[{{years}}]
+  //         // type: 'datetime',
+  //         // dateTimeLabelFormats: {
+  //         //     year: '%Y'
+  //             ,
+  //             //  maxZoom: 5,
+  //         labels: {
+  //           style: {
+  //               color: '#000000',
+  //               fontSize: '14px'
+  //           }
+  //         }
+  //       },
+
+
+  //       yAxis:[{
+  //         title:{
+  //                 text: 'Temperature (\xB0F)',
+  //                       style: {
+  //                         fontSize: '14px'
+  //                      },
+  //               },
+  //               labels: {
+  //                 style: {
+  //                         color: '#000000'
+  //                       }
+  //               }
+  //       }],
+  //       tooltip:{
+  //               shared: true,
+  //               crosshairs: true,
+  //               dateTimeLabelFormats: {
+  //                 year: '%Y'}
+  //       },
+  //       credits:{
+  //               text: 'Click and drag to zoom',
+  //               href: 'http://www.rcc-acis.org/'
+  //       },
+   
+  //       series:[{
+  //         name: 'MAAT',
+  //         data: [{{MAAT}}],
+  //         dashStyle: 'dash',
+  //         color: Highcharts.getOptions().colors[1]
+  //         },
+  //         {
+  //         name: '5 year rolling mean',
+  //         data: [{{MAAT_rol}}],
+  //         lineWidth: 2,
+  //         color: Highcharts.getOptions().colors[1],
+  //         showInLegend: true,
+  //         marker: {
+  //         enabled: false
+  //           }
+  //         }
+        
+  //         ]
+  // });
+  // }
+  // )
+    </script>  
+    </body>
+</html>
