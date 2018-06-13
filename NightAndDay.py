@@ -93,15 +93,18 @@ def makeRange(xData, lowdata, highdata):
         temp += str(lowdata[index]) + ',' 
         temp += str(value) + ']'
         current += temp + ','
-        # if lowdata[index] >= value :
-            # temp += str(value) + ',' 
-            # temp += str(lowdata[index]) + ']'
-            # current += temp + ','
-
     current = current[:-1]
     current += ']'
     current = current.replace("nan", "null")
     return current
+
+# check if a date is in winter
+def iswinter(somedatetime):
+    theyear = somedatetime.year
+    return (
+        somedatetime < dt.datetime(theyear, 3, 21) or
+        somedatetime > dt.datetime(theyear, 10, 21)
+        )
 
 
 ## customize ephem library output
@@ -125,10 +128,9 @@ def rise_set(horizon, center, station, lat, lon, dates ):
             rises_out.append(str(rises))
             sets_out.append(str(sets))
         #output nan if arctic night or arctic day error ocurrs
-        except (ephem.CircumpolarError, ephem.NeverUpError) :
- #           rises_out.append((dt.datetime.strptime(dates[ix], '%Y/%m/%d %H:%M') - dt.timedelta(hours=TIMEZONEOFFSET_H)).strftime('%Y/%m/%d %H:%M'))
- #           sets_out.append((dt.datetime.strptime(dates[ix], '%Y/%m/%d %H:%M')  - dt.timedelta(hours=TIMEZONEOFFSET_H)).strftime('%Y/%m/%d %H:%M'))
-            if dt.datetime.strptime(dates[ix], '%Y/%m/%d %H:%M').month in [1, 2, 3, 10, 11, 12]:
+        except ephem.CircumpolarError :
+            thedate_dt = dt.datetime.strptime(dates[ix], '%Y/%m/%d %H:%M') 
+            if iswinter(thedate_dt):
                 rises_out.append((dt.datetime.strptime(dates[ix], '%Y/%m/%d %H:%M') + dt.timedelta(hours=12)).strftime('%Y/%m/%d %H:%M'))
                 sets_out.append((dt.datetime.strptime(dates[ix], '%Y/%m/%d %H:%M') + dt.timedelta(hours=12)).strftime('%Y/%m/%d %H:%M'))
             else: 
